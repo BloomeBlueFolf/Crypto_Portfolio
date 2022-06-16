@@ -1,0 +1,56 @@
+import datetime
+import pathlib
+import requests
+
+
+API_KEY = "*******"  # use your API-Key from https://coinmarketcap.com/api/
+
+request_url = f'https://pro-api.coinmarketcap.com/v1/cryptocurrency/quotes/latest?CMC_PRO_API_KEY={API_KEY}' \
+              f'&symbol=ETH,XRP,VET,ADA'  # customize with using the symbol of your cryptos!
+response = requests.get(request_url)
+
+if response.status_code == 200:
+    data = response.json()
+
+    ada = round(data["data"]["ADA"]["quote"]["USD"]["price"], 3) # customize with using the symbol of your cryptos!
+    eth = round(data["data"]["ETH"]["quote"]["USD"]["price"], 2)
+    xrp = round(data["data"]["XRP"]["quote"]["USD"]["price"], 3)
+    vet = round(data["data"]["VET"]["quote"]["USD"]["price"], 3)
+
+else:
+    print("Something went wrong!")
+
+
+def show_market_prices():
+    print("The current price of Cardano is {}$.\n"
+          "The current price of Ethereum is {}$.\n"
+          "The current price of Ripple is {}$.\n"
+          "The current price of VeChain is {}$.\n".format(ada, eth, xrp, vet))
+
+
+def calculate_portfolio():
+    sum = round({amount1}*ada + {amount2}*vet + {amount3}*xrp + {amount4}*eth, 2) # replace with your amount of tokens
+    return_value = f"The portfolio is currently {sum}$ worth.\n"
+
+    print(return_value)
+
+    return sum
+
+
+def print_doc():
+    sum = calculate_portfolio()
+    date = datetime.datetime.now().strftime("%d.%m.%Y %H:%M:%S")
+
+    try:
+        #with open(str(pathlib.Path(__file__).parent)+"\\market_price.txt", "a", encoding="utf-8") as file:
+        with open(r"C:\Users\fege\OneDrive\Dokumente\Dokumente\wichtig\Crypto\market_price.txt", "a", encoding="utf-8") as file:
+            file.write(f"The portfolio is currently {sum}$ worth. [{date}]\n")
+
+    except FileNotFoundError:
+        print("The requested path does not exist!")
+
+
+if __name__ == "__main__":
+    show_market_prices()
+    print_doc()
+    input()
